@@ -27,6 +27,15 @@ struct UserService {
         }
     }
     
+    static func show(forUID uid: String, completion: @escaping (User?) -> Void) {
+        let userRef = Database.database().reference().child("users").child(uid)
+        userRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let user = User(snapshot: snapshot) else {
+                return completion(nil)
+            }
+            return completion(user)
+        })
+    }
     
     
 }

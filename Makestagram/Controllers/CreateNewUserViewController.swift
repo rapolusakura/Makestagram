@@ -20,10 +20,14 @@ class CreateNewUserViewController: UIViewController {
         let username = usernameTextField.text,
         !username.isEmpty else {return}
         
-        UserService.create(firUser, username: username) { (User?) in
+        UserService.create(firUser, username: username) { (user) in
+            guard let user = user else {return}
+            User.setCurrent(user)
             
+            let initialViewController = UIStoryboard.initialViewController(for: .main)
+            self.view.window?.rootViewController = initialViewController
+            self.view.window?.makeKeyAndVisible()
         }
-        
     }
     
     override func viewDidLoad() {
